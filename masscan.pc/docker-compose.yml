@@ -1,0 +1,11 @@
+services:
+  masscan-vuln:
+    build: .
+    container_name: masscan-vuln-target
+    ports:
+      - "80:80"        # Web App
+      - "6379:6379"    # Redis
+      - "11211:11211"  # Memcached
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
