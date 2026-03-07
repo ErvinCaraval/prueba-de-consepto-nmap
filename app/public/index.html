@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeonCorp — Secure Control Panel (v1.0.3-beta)</title>
+    <!-- Comentario de desarrollador (Visible para Nmap HTTP-comments) -->
+    <!-- TODO: Disable anonymous FTP access before shipping. Temp credentials on FTP. -->
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050510;
+            --primary: #0ff;
+            --accent: #f0f;
+            --alert: #f00;
+            --grid: rgba(0, 255, 255, 0.1);
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--primary);
+            font-family: 'Share Tech Mono', monospace;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            background-image:
+                linear-gradient(var(--grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+            background-size: 30px 30px;
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        .container {
+            background: rgba(0, 20, 30, 0.8);
+            border: 2px solid var(--primary);
+            padding: 3rem;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2), inset 0 0 20px rgba(0, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            width: 20px;
+            height: 20px;
+            border-top: 4px solid var(--accent);
+            border-left: 4px solid var(--accent);
+        }
+
+        .container::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 20px;
+            height: 20px;
+            border-bottom: 4px solid var(--accent);
+            border-right: 4px solid var(--accent);
+        }
+
+        h1 {
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 2.5rem;
+            margin-top: 0;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            text-shadow: 0 0 15px #fff;
+        }
+
+        .status {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: var(--accent);
+        }
+
+        .login-box {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        input {
+            background: transparent;
+            border: 1px solid var(--primary);
+            padding: 15px;
+            color: #fff;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.2rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            box-shadow: 0 0 15px var(--primary);
+            background: rgba(0, 255, 255, 0.05);
+        }
+
+        button {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 15px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.2rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        .warning {
+            margin-top: 2rem;
+            color: var(--alert);
+            font-size: 0.85rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 1;
+                text-shadow: 0 0 10px var(--alert);
+            }
+
+            100% {
+                opacity: 0.5;
+            }
+        }
+
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(0, 255, 255, 0.3);
+            opacity: 0.4;
+            animation: scan 8s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scan {
+            0% {
+                top: -10px;
+            }
+
+            100% {
+                top: 100vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="scanline"></div>
+    <div class="container">
+        <h1>NeonCorp</h1>
+        <div class="status">
+            <span>SYS.STATUS: <span style="color:#fff">ONLINE</span></span>
+            <span>VER: 1.0.3-beta</span>
+            <span>SEC_LEVEL: LOW</span>
+        </div>
+
+        <p style="margin-bottom: 2rem; line-height: 1.5;">
+            Welcome to the internal mainframe. Unauthorized access is strictly prohibited and monitored.
+            <i>Note from dev ops: Telnet backup enabled on port 23 during FTP migration.</i>
+        </p>
+
+        <form class="login-box" onsubmit="checkLogin(event)">
+            <input type="text" id="username" placeholder="ROOT_ID //" required>
+            <input type="password" id="password" placeholder="PASSWORD //" required>
+            <button type="submit">>> INITIATE LOGIN_</button>
+        </form>
+
+        <div id="loginResult" style="margin-top: 20px; font-weight: bold; font-size: 1.2rem; text-align: center;"></div>
+
+        <div class="warning">
+            [!] WARNING: Unencrypted connection detected (HTTP).
+            Proceed with caution.
+        </div>
+    </div>
+
+    <script>
+        function checkLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            const res = document.getElementById('loginResult');
+
+            if (user === 'admin' && pass === 'Th1s1sS3cr3t123!') {
+                res.style.color = '#0f0';
+                res.style.textShadow = '0 0 10px #0f0';
+                res.innerHTML = "ACCESS GRANTED.<br><br>SYSTEM BYPASSED.<br>You have officially hacked NeonCorp.<br>Mission Accomplished! 🏁";
+            } else {
+                res.style.color = 'var(--alert)';
+                res.style.textShadow = '0 0 10px var(--alert)';
+                res.innerHTML = "ACCESS DENIED. Invalid Credentials.";
+            }
+        }
+    </script>
+</body>
+
+</html>

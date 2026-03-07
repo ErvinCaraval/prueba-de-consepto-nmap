@@ -1,0 +1,25 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Entorno y variables locales
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Archivos descargados durante las pruebas (botín del FTP)
+database_credentials.txt
+
+# Editor y OS
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db

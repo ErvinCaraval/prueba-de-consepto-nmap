@@ -1,0 +1,15 @@
+
+services:
+  neoncorp-vuln:
+    build: .
+    container_name: neoncorp-vuln
+    ports:
+      - "80:80"     # Web App
+      - "21:21"     # FTP
+      - "21100-21110:21100-21110" # FTP Pasivo
+      - "22:22"     # SSH
+      - "23:23"     # Telnet
+    restart: unless-stopped
+    # Se requiere cap_add para algunos servicios antiguos de red
+    cap_add:
+      - NET_ADMIN
