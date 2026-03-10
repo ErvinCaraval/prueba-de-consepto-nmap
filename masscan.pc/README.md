@@ -1,10 +1,10 @@
-# ⚡ Masscan Target: Cachés en Memoria Expuestas
+#  Masscan Target: Cachés en Memoria Expuestas
 
 Has completado Nmap. Ahora pasamos a la **herramienta análoga: Masscan**.
 
 Mientras que **Nmap** es como un investigador detallista usando una linterna para analizar todo en profundidad, **Masscan** es como encender los faros antiniebla de un estadio para ver a dónde ir al instante. Masscan puede escanear **todo Internet (IPv4)** en 6 minutos buscando agujeros de seguridad como bases de datos mal configuradas.
 
-## 🚀 1. Levantar el Entorno (Target)
+##  1. Levantar el Entorno (Target)
 
 Nuestra máquina víctima de hoy tiene sus memorias caché (Redis y Memcached) expuestas por error a "Internet" (simulado localmente). Su servidor web advierte sobre esto... pero ya es tarde.
 
@@ -18,7 +18,7 @@ docker compose up --build -d
 
 ---
 
-## 🌩️ 2. Práctica: Ataque Masivo con Masscan
+## 2. Práctica: Ataque Masivo con Masscan
 
 ### Paso 2.1: Instalar Masscan (Requisito)
 Masscan no suele venir preinstalado. Si no lo tienes:
@@ -30,7 +30,7 @@ sudo apt install -y masscan
 ### Paso 2.2: El Escaneo Ultrarrápido
 Los criminales usan Masscan para buscar servidores Redis en el puerto **6379** en bloques enormes de IP. 
 
-🚨 **¡ATENCIÓN CON MASSCAN Y LOCALHOST!** 🚨
+**¡ATENCIÓN CON MASSCAN Y LOCALHOST!** 
 Masscan construye sus propios paquetes de red saltándose el sistema operativo para ser súper rápido. Por esta razón, **¡NO ESCANEA `127.0.0.1` NI `localhost` CORRECTAMENTE!** 
 
 En su lugar, debes decirle a Masscan que escanee la IP local de tu computadora en la red Wi-Fi/LAN (ej. `192.168.1.X`), o bien, la IP interna de Docker. 
@@ -42,7 +42,7 @@ sudo masscan 192.168.1.15 -p6379,11211,80 --rate=1000
 ```
 *(Cambiando `192.168.1.15` por la IP que te haya dado el comando `ip a`)*
 
-👉 **¿Qué ves?**
+ **¿Qué ves?**
 Masscan detectará de manera casi **instantánea** los puertos si usaste tu IP real. A diferencia de Nmap, no mostrará versiones, advertencias ni datos precisos. Solo te dirá "Discovered open port X". Así de simple y rápido.
 
 ### Paso 2.3: La Explotación Manual
@@ -68,11 +68,11 @@ KEYS *
 GET admin_session_token
 ```
 
-🎉 ¡Misión cumplida! Conseguiste la **FLAG** que simula un robo de información sensible.
+ ¡Misión cumplida! Conseguiste la **FLAG** que simula un robo de información sensible.
 
 ---
 
-## 🛑 Limpieza del Entorno
+## Limpieza del Entorno
 
 ```bash
 docker compose down
